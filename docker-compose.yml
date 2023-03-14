@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  location-backend:
+    container_name: "location-backend"
+    build:
+      dockerfile: src/Locations.API/Dockerfile
+      context: .
+    ports:
+      - 44383:80
