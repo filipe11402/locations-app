@@ -16,6 +16,8 @@ builder.Services.AddCors(action =>
     });
 });
 
+builder.Services.AddHostedService<LocationDataCleaningWorkerService>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
