@@ -1,3 +1,3 @@
 ﻿namespace Locations.API.Requests;
 
-public record SaveLocationRequest(string Latitude, string Longitude, string DeviceId);
+public record SaveLocationRequest(double Latitude, double Longitude, string DeviceId);

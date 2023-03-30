@@ -4,14 +4,14 @@ public class Location
 {
 	public string DeviceId { get; set; }
 
-    public string Latitude { get; set; }
+    public double Latitude { get; set; }
 
-	public string Longitude { get; set; }
+	public double Longitude { get; set; }
 
     public Location(
         string deviceId,
-        string latitude,
-        string longitude)
+        double latitude,
+        double longitude)
     {
         DeviceId = deviceId;
         Latitude = latitude;
