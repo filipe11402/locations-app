@@ -8,18 +8,18 @@ public static class LocationHelpers
 
     public static double CalculateTraveledDistanceInSeconds(Location startingLocation, Location endLocation) 
     {
-        var firstLocationDistance = startingLocation.Latitude * (Math.PI / 180.0);
-        var firstLocationNumber = startingLocation.Longitude * (Math.PI / 180.0);
-        var secondLocationDistance = endLocation.Latitude * (Math.PI / 180.0);
-        var secondLocationNumber = endLocation.Longitude * (Math.PI / 180.0) - firstLocationNumber;
-        var locationDistanceSubtraction = Math.Pow(Math.Sin((secondLocationDistance - firstLocationDistance) / 2.0), 2.0) +
-                 Math.Cos(firstLocationDistance) * Math.Cos(secondLocationDistance) * Math.Pow(Math.Sin(secondLocationNumber / 2.0), 2.0);
-        return 6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(locationDistanceSubtraction), Math.Sqrt(1.0 - locationDistanceSubtraction)));
+        var firstLocationDistance = startingLocation.Latitude * (Math.PI / 180);
+        var firstLocationNumber = startingLocation.Longitude * (Math.PI / 180);
+        var secondLocationDistance = endLocation.Latitude * (Math.PI / 180);
+        var secondLocationNumber = endLocation.Longitude * (Math.PI / 180) - firstLocationNumber;
+        var locationDistanceSubtraction = Math.Pow(Math.Sin((secondLocationDistance - firstLocationDistance) / 2), 2) +
+                 Math.Cos(firstLocationDistance) * Math.Cos(secondLocationDistance) * Math.Pow(Math.Sin(secondLocationNumber / 2), 2);
+        return Math.Round(6376500 * (2 * Math.Atan2(Math.Sqrt(locationDistanceSubtraction), Math.Sqrt(1 - locationDistanceSubtraction))), 2);
     }
 
-    public static int CalculateTimeDifferenceInSeconds(this DateTime initialTime, DateTime endTime)
-        => (endTime - initialTime).Seconds;
+    public static double CalculateTimeDifferenceInSeconds(this DateTime initialTime, DateTime endTime)
+        => Math.Round(endTime.Subtract(initialTime).TotalSeconds, 2);
 
-    public static double CalculateSpeedInMetersPerSecond(this double distanceCovered, int timeSpent)
+    public static double CalculateSpeedInMetersPerSecond(this double distanceCovered, double timeSpent)
         => distanceCovered / timeSpent;
 }
