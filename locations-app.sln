@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Locations.API", "src\Locati
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8E0A2978-8050-4DDB-AF22-E78B2941ADC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locations.Tests", "tests\Locations.Tests\Locations.Tests.csproj", "{FFDB3B05-4D6C-4730-880D-90F2999DC97E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Locations.Tests", "tests\Locations.Tests\Locations.Tests.csproj", "{FFDB3B05-4D6C-4730-880D-90F2999DC97E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locations.Consoles", "src\Locations.Consoles\Locations.Consoles.csproj", "{9F8EE553-6D68-45BD-87D3-59771203F6EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{FFDB3B05-4D6C-4730-880D-90F2999DC97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFDB3B05-4D6C-4730-880D-90F2999DC97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFDB3B05-4D6C-4730-880D-90F2999DC97E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F8EE553-6D68-45BD-87D3-59771203F6EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F8EE553-6D68-45BD-87D3-59771203F6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F8EE553-6D68-45BD-87D3-59771203F6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F8EE553-6D68-45BD-87D3-59771203F6EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B3FFD04D-2347-4D7F-8C6E-1F4550AA7D18} = {5144468C-1F61-406F-90BA-A149241193D5}
 		{FFDB3B05-4D6C-4730-880D-90F2999DC97E} = {8E0A2978-8050-4DDB-AF22-E78B2941ADC5}
+		{9F8EE553-6D68-45BD-87D3-59771203F6EF} = {5144468C-1F61-406F-90BA-A149241193D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ABD29FAD-01DD-4F04-B8FB-56BCA54BF2D1}
