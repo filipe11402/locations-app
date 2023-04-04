@@ -8,6 +8,16 @@ public class Location
 
 	public double Longitude { get; set; }
 
+    public int ZeroValue { get; set; }
+
+    public double Altitude { get; set; }
+
+    public double NumberOfDays { get; set; }
+
+    public DateTime Date { get; set; }
+
+    public string Time { get; set; }
+
     public Location(
         string deviceId,
         double latitude,
@@ -16,5 +26,23 @@ public class Location
         DeviceId = deviceId;
         Latitude = latitude;
         Longitude = longitude;
+    }
+
+    public Location(
+        double latitude,
+        double longitude,
+        int zeroValue,
+        double altitude,
+        double numberOfDays,
+        DateTime date, 
+        string time)
+    {
+        Latitude = latitude;
+        Longitude = longitude;
+        ZeroValue = zeroValue;
+        Altitude = altitude;
+        NumberOfDays = numberOfDays;
+        Date = date;
+        Time = time;
     }
 }
