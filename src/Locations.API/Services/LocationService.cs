@@ -18,10 +18,13 @@ public class LocationService : ILocationService
         using var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
 
         csvWriter.WriteRecord(
-            new Location(
-                location.DeviceId,
-                location.Latitude,
-                location.Longitude));
+            new Location
+            {
+                //TODO: check this scenario
+                //DeviceId = location.DeviceId,
+                Latitude = location.Latitude,
+                Longitude = location.Longitude
+            });
 
         await csvWriter.DisposeAsync();
         await streamWriter.DisposeAsync();

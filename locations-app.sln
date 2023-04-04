@@ -11,7 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8E0A2978
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Locations.Tests", "tests\Locations.Tests\Locations.Tests.csproj", "{FFDB3B05-4D6C-4730-880D-90F2999DC97E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locations.Consoles", "src\Locations.Consoles\Locations.Consoles.csproj", "{9F8EE553-6D68-45BD-87D3-59771203F6EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Locations.Consoles", "src\Locations.Consoles\Locations.Consoles.csproj", "{9F8EE553-6D68-45BD-87D3-59771203F6EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A04490B0-DB4C-49BD-8789-CB91714A7779}"
+	ProjectSection(SolutionItems) = preProject
+		assets\15-07-2017-ap-02738d854419-pml.csv = assets\15-07-2017-ap-02738d854419-pml.csv
+		assets\20081026094426.csv.csv = assets\20081026094426.csv.csv
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
