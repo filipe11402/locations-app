@@ -43,6 +43,8 @@ for (int totalLocation = 0; totalLocation < locations.Count; totalLocation++)
 
     Console.WriteLine($"PONTO {startLocationCount} VS PONTO {endLocationCount}");
 
+    Console.WriteLine("");
+
     var initialTime = DateTime.Parse($"{startLocation.Date} {startLocation.Time}");
     var endTime = DateTime.Parse($"{endLocation.Date} {endLocation.Time}");
     var timeDifferece = initialTime.CalculateTimeDifferenceInSeconds(endTime);
@@ -51,23 +53,37 @@ for (int totalLocation = 0; totalLocation < locations.Count; totalLocation++)
 
     Console.WriteLine($"TEMPO DECORRIDO: {timeDifferece}s");
 
+    Console.WriteLine("");
+
     var traveledDistance = LocationHelpers.CalculateTraveledDistanceInSeconds(startLocation, endLocation);
 
     totalTraveledDistance += traveledDistance;
 
     Console.WriteLine($"DISTANCIA ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {traveledDistance}m");
 
+    Console.WriteLine("");
+
     var transportationSpeed = traveledDistance.CalculateSpeedInMetersPerSecond(timeDifferece);
 
     Console.WriteLine($"VELOCIDADE ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationSpeed} m/s");
+
+    Console.WriteLine("");
 
     var transportationSpeedInKmsPerHour = transportationSpeed.CalculateSpeedInKmPerHour();
 
     Console.WriteLine($"VELOCIDADE ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationSpeedInKmsPerHour} km/h");
 
+    Console.WriteLine("");
+
     var transportationVehicle = transportationSpeedInKmsPerHour.GetTransportationMethod();
 
     Console.WriteLine($"VEICULO UTILIZADO ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationVehicle} ");
+
+    Console.WriteLine("");
+
+    Console.WriteLine("----------------------------------------------------------------------------");
+
+    Console.WriteLine("");
 
     Task.Delay(2000);
 
