@@ -28,7 +28,8 @@ public static class LocationHelpers
 
     public static string GetTransportationMethod(this double distanceInKmPerHour)
     {
-        if(distanceInKmPerHour <= 5) { return "Pé"; }
+        if (distanceInKmPerHour == 0) { return "Parado"; }
+        if (distanceInKmPerHour <= 5) { return "Pé"; }
         if(distanceInKmPerHour > 5 && distanceInKmPerHour <= 20) { return "Bicicleta"; }
         if(distanceInKmPerHour > 20 && distanceInKmPerHour <= 120) { return "Carro"; }
         if(distanceInKmPerHour > 120 && distanceInKmPerHour <= 200) { return "Comboio"; }
