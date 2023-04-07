@@ -70,9 +70,30 @@ try
     csvReader.Dispose();
     streamReader.Dispose();
 }
-catch (FileNotFoundException ex)
+catch (Exception ex)
 {
-    Console.WriteLine("File was not found, try again!");
+    HandleException(ex);
+}
+
+void HandleException(Exception ex) 
+{
+    if (ex is FileNotFoundException) 
+    {
+        Console.WriteLine("File was not found, try again!");
+        Console.WriteLine(ex.Message);
+
+        return;
+    }
+
+    if (ex is HeaderValidationException) 
+    {
+        Console.WriteLine("CSV is not in right format");
+        Console.WriteLine(ex.Message);
+
+        return;
+    }
+
+    Console.WriteLine("Unexpected error happened, try again later");
     Console.WriteLine(ex.Message);
 }
 
