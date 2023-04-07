@@ -1,4 +1,4 @@
-﻿using Locations.API.Models;
+﻿using Locations.Consoles;
 
 namespace Locations.API.Helpers;
 

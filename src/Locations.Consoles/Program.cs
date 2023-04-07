@@ -1,7 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using Locations.API.Helpers;
-using Locations.API.Models;
+using Locations.Consoles;
 using System.Globalization;
 using System.Text;
 
@@ -17,7 +17,7 @@ Console.WriteLine("\n#########################################\n");
 
 try
 {
-    using var streamReader = new StreamReader(filePath!);
+    using var streamReader = new StreamReader(filePath + ".csv"!);
 
     var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
     {

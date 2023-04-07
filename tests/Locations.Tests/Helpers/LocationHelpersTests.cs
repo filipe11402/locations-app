@@ -1,5 +1,5 @@
 ﻿using Locations.API.Helpers;
-using Locations.API.Models;
+using Locations.Consoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +13,27 @@ public class LocationHelpersTests
     [Fact]
     public void CalculateTraveledDistanceInSeconds_ValuesMatchExpected() 
     {
-        //var firstLocation = new Location(
-        //    Guid.NewGuid().ToString(),
-        //    2.5,
-        //    3.0);
+        var firstLocation = new Location(
+            2.5,
+            3.0,
+            1,
+            0,
+            1,
+            string.Empty,
+            string.Empty);
 
-        //var secondLocation = new Location(
-        //    Guid.NewGuid().ToString(),
-        //    10.0,
-        //    5.2);
+        var secondLocation = new Location(
+            10.0,
+            5.2,
+            1,
+            0,
+            1,
+            string.Empty,
+            string.Empty);
 
-        //var act = LocationHelpers.CalculateTraveledDistanceInSeconds(firstLocation, secondLocation);
+        var act = LocationHelpers.CalculateTraveledDistanceInSeconds(firstLocation, secondLocation);
 
-        //Assert.Equal(869391.90, act);
+        Assert.Equal(869391.90, act);
     }
 
     [Fact]
