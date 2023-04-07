@@ -34,6 +34,16 @@ try
         .Skip(totalLinesToSkip)
         .ToList();
 
+    locations = locations.Where(record => record.Latitude > -90 || record.Latitude < 90).ToList()
+    .Where(record => record.Longitude > -180 || record.Longitude < 180).ToList()
+    .Where(record => record.ZeroValue == 0 || record.ZeroValue == 1).ToList()
+    .Where(record => record.Altitude > -1000 || record.Latitude < 10000).ToList()
+    .Where(record => record.Latitude > -90 || record.Latitude < 90).ToList();
+
+    var totalTraveledDistance = 0.0;
+
+    var totalSpentTime = 0.0;
+
     for (int totalLocation = 0; totalLocation < locations.Count; totalLocation++)
     {
         if (totalLocation + 1 == locations.Count) { break; }
@@ -44,21 +54,36 @@ try
         var startLocationCount = 1;
         var endLocationCount = startLocationCount++;
 
-        Console.WriteLine($"PONTO {startLocationCount} VS PONTO {endLocationCount}");
+        Console.WriteLine($"PONTO {startLocationCount} VS PONTO {endLocationCount}\n");
 
-        var initialTime = DateTime.Parse($"{startLocation.Date.ToString("MM/dd/yyyy")} {startLocation.Time}");
-        var endTime = DateTime.Parse($"{endLocation.Date.ToString("MM/dd/yyyy")} {endLocation.Time}");
+
+        var initialTime = DateTime.Parse($"{startLocation.Date} {startLocation.Time}");
+        var endTime = DateTime.Parse($"{endLocation.Date} {endLocation.Time}");
         var timeDifferece = initialTime.CalculateTimeDifferenceInSeconds(endTime);
 
-        Console.WriteLine($"TEMPO DECORRIDO: {timeDifferece}s");
+        totalSpentTime += timeDifferece;
+
+        Console.WriteLine($"TEMPO DECORRIDO: {timeDifferece}s \n");
 
         var traveledDistance = LocationHelpers.CalculateTraveledDistanceInSeconds(startLocation, endLocation);
 
-        Console.WriteLine($"DISTANCIA ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {traveledDistance}m");
+        totalTraveledDistance += traveledDistance;
+
+        Console.WriteLine($"DISTANCIA ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {traveledDistance}m \n");
 
         var transportationSpeed = traveledDistance.CalculateSpeedInMetersPerSecond(timeDifferece);
 
-        Console.WriteLine($"VELOCIDADE ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationSpeed} m/s");
+        Console.WriteLine($"VELOCIDADE ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationSpeed} m/s \n");
+
+        var transportationSpeedInKmsPerHour = transportationSpeed.CalculateSpeedInKmPerHour();
+
+        Console.WriteLine($"VELOCIDADE ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationSpeedInKmsPerHour} km/h \n");
+
+        var transportationVehicle = transportationSpeedInKmsPerHour.GetTransportationMethod();
+
+        Console.WriteLine($"VEICULO UTILIZADO ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationVehicle} \n");
+
+        Console.WriteLine("---------------------------------------------------------------------------- \n");
 
         Task.Delay(6000);
 
@@ -66,6 +91,9 @@ try
     }
 
     Console.WriteLine($"Your data was analyzed, based on {locations.Count} lines");
+    Console.WriteLine($"DISTANCIA PERCORIDA NO TOTAL {Math.Round(totalTraveledDistance, 2)} METROS");
+    Console.WriteLine($"TEMPO GASTO NO TOTAL {Math.Round(totalSpentTime, 2)} SEGUNDOS");
+
 
     csvReader.Dispose();
     streamReader.Dispose();
@@ -75,9 +103,9 @@ catch (Exception ex)
     HandleException(ex);
 }
 
-void HandleException(Exception ex) 
+void HandleException(Exception ex)
 {
-    if (ex is FileNotFoundException) 
+    if (ex is FileNotFoundException)
     {
         Console.WriteLine("File was not found, try again!");
         Console.WriteLine(ex.Message);
@@ -85,7 +113,7 @@ void HandleException(Exception ex)
         return;
     }
 
-    if (ex is HeaderValidationException) 
+    if (ex is HeaderValidationException)
     {
         Console.WriteLine("CSV is not in right format");
         Console.WriteLine(ex.Message);
