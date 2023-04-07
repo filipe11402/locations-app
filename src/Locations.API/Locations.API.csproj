@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="Assets\Locations\*" />
+    <Folder Include="Locations\" />
   </ItemGroup>
 
 </Project>

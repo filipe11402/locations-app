@@ -1,6 +1,9 @@
 ﻿using Locations.API.Requests;
 using Locations.API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace Locations.API.Controllers;
 
@@ -28,6 +31,9 @@ public class LocationsController : ControllerBase
     }
 
     [HttpGet("file/{deviceId}/download")]
+    [Produces("application/json", "text/csv")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileContentResult))]
     public async Task<IActionResult> DownloadFile(
         [FromRoute] string deviceId)
     {
