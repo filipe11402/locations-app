@@ -5,52 +5,87 @@ using Locations.API.Models;
 using System.Globalization;
 using System.Text;
 
-var fileLocation = $@"{Directory.GetCurrentDirectory()}\..\..\..\..\..\assets\20081026094426.csv.csv";
+Console.WriteLine("#########################################\n");
 
-using var streamReader = new StreamReader(Path.GetFullPath(fileLocation));
+Console.WriteLine(@"Introduce the complete path for the file you want to analyze(eg: c:\...): ");
+var filePath = Console.ReadLine();
 
-var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
+Console.WriteLine(@"Introduce how many lines you would like to skip: ");
+int.TryParse(Console.ReadLine(), out int totalLinesToSkip);
+
+Console.WriteLine("\n#########################################\n");
+
+try
 {
-    Encoding = Encoding.UTF8,
-    Delimiter = ","
-};
-using var csvReader = new CsvReader(streamReader, configuration);
+    using var streamReader = new StreamReader(filePath!);
 
-int locationPoint = 1;
+    var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
+    {
+        Encoding = Encoding.UTF8,
+        Delimiter = ","
+    };
+    using var csvReader = new CsvReader(streamReader, configuration);
 
-var locations = csvReader.GetRecords<Location>()
-    .ToList();
+    csvReader.Context.RegisterClassMap<LocationMap>();
 
-for (int totalLocation = 0; totalLocation < locations.Count; totalLocation++)
+    int locationPoint = 1;
+
+    var locations = csvReader.GetRecords<Location>()
+        .Skip(totalLinesToSkip)
+        .ToList();
+
+    for (int totalLocation = 0; totalLocation < locations.Count; totalLocation++)
+    {
+        if (totalLocation + 1 == locations.Count) { break; }
+
+        var startLocation = locations[totalLocation];
+        var endLocation = locations[totalLocation + 1];
+
+        var startLocationCount = 1;
+        var endLocationCount = startLocationCount++;
+
+        Console.WriteLine($"PONTO {startLocationCount} VS PONTO {endLocationCount}");
+
+        var initialTime = DateTime.Parse($"{startLocation.Date.ToString("MM/dd/yyyy")} {startLocation.Time}");
+        var endTime = DateTime.Parse($"{endLocation.Date.ToString("MM/dd/yyyy")} {endLocation.Time}");
+        var timeDifferece = initialTime.CalculateTimeDifferenceInSeconds(endTime);
+
+        Console.WriteLine($"TEMPO DECORRIDO: {timeDifferece}s");
+
+        var traveledDistance = LocationHelpers.CalculateTraveledDistanceInSeconds(startLocation, endLocation);
+
+        Console.WriteLine($"DISTANCIA ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {traveledDistance}m");
+
+        var transportationSpeed = traveledDistance.CalculateSpeedInMetersPerSecond(timeDifferece);
+
+        Console.WriteLine($"VELOCIDADE ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationSpeed} m/s");
+
+        Task.Delay(6000);
+
+        locationPoint++;
+    }
+
+    Console.WriteLine($"Your data was analyzed, based on {locations.Count} lines");
+
+    csvReader.Dispose();
+    streamReader.Dispose();
+}
+catch (FileNotFoundException ex)
 {
-    if (totalLocation + 1 == locations.Count) { break; }
-
-    var startLocation = locations[totalLocation];
-    var endLocation = locations[totalLocation + 1];
-
-    var startLocationCount = 1;
-    var endLocationCount = startLocationCount++;
-
-    Console.WriteLine($"PONTO {startLocationCount} VS PONTO {endLocationCount}");
-
-    var initialTime = DateTime.Parse($"{startLocation.Date.ToString("MM/dd/yyyy")} {startLocation.Time}");
-    var endTime = DateTime.Parse($"{endLocation.Date.ToString("MM/dd/yyyy")} {endLocation.Time}");
-    var timeDifferece = initialTime.CalculateTimeDifferenceInSeconds(endTime);
-
-    Console.WriteLine($"TEMPO DECORRIDO: {timeDifferece}s");
-
-    var traveledDistance = LocationHelpers.CalculateTraveledDistanceInSeconds(startLocation, endLocation);
-
-    Console.WriteLine($"DISTANCIA ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {traveledDistance}m");
-
-    var transportationSpeed = traveledDistance.CalculateSpeedInMetersPerSecond(timeDifferece);
-
-    Console.WriteLine($"VELOCIDADE ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationSpeed} m/s");
-
-    Task.Delay(2000);
-
-    locationPoint++;
+    Console.WriteLine("File was not found, try again!");
+    Console.WriteLine(ex.Message);
 }
 
-csvReader.Dispose();
-streamReader.Dispose();
+public class LocationMap : ClassMap<Location>
+{
+    public LocationMap()
+    {
+        Map(m => m.Latitude).Name("Latitude");
+        Map(m => m.Longitude).Name("Longitude");
+        Map(m => m.Altitude).Name("Altitude");
+        Map(m => m.ZeroValue).Name("ZeroValue");
+        Map(m => m.Time).Name("Time");
+        Map(m => m.NumberOfDays).Name("NumberOfDays");
+        Map(m => m.Date).Name("Date");
+    }
+}
