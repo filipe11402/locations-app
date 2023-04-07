@@ -26,36 +26,25 @@ try
     };
     using var csvReader = new CsvReader(streamReader, configuration);
 
-    csvReader.Context.RegisterClassMap<LocationMap>();
-
     int locationPoint = 1;
 
-    var locations = csvReader.GetRecords<Location>()
-        .Skip(totalLinesToSkip)
-        .ToList();
-
-    locations = locations.Where(record => record.Latitude > -90 || record.Latitude < 90).ToList()
-    .Where(record => record.Longitude > -180 || record.Longitude < 180).ToList()
-    .Where(record => record.ZeroValue == 0 || record.ZeroValue == 1).ToList()
-    .Where(record => record.Altitude > -1000 || record.Latitude < 10000).ToList()
-    .Where(record => record.Latitude > -90 || record.Latitude < 90).ToList();
+    var locations = FilterCsvRecords(csvReader, totalLinesToSkip);
 
     var totalTraveledDistance = 0.0;
 
     var totalSpentTime = 0.0;
 
-    for (int totalLocation = 0; totalLocation < locations.Count; totalLocation++)
+    for (int totalLocation = 0; totalLocation < locations.Count(); totalLocation++)
     {
-        if (totalLocation + 1 == locations.Count) { break; }
+        if (totalLocation + 1 == locations.Count()) { break; }
 
-        var startLocation = locations[totalLocation];
-        var endLocation = locations[totalLocation + 1];
+        var startLocation = locations.ElementAt(totalLocation);
+        var endLocation = locations.ElementAt(totalLocation + 1);
 
         var startLocationCount = 1;
         var endLocationCount = startLocationCount++;
 
         Console.WriteLine($"PONTO {startLocationCount} VS PONTO {endLocationCount}\n");
-
 
         var initialTime = DateTime.Parse($"{startLocation.Date} {startLocation.Time}");
         var endTime = DateTime.Parse($"{endLocation.Date} {endLocation.Time}");
@@ -90,7 +79,7 @@ try
         locationPoint++;
     }
 
-    Console.WriteLine($"Your data was analyzed, based on {locations.Count} lines");
+    Console.WriteLine($"Your data was analyzed, based on {locations.Count()} lines");
     Console.WriteLine($"DISTANCIA PERCORIDA NO TOTAL {Math.Round(totalTraveledDistance, 2)} METROS");
     Console.WriteLine($"TEMPO GASTO NO TOTAL {Math.Round(totalSpentTime, 2)} SEGUNDOS");
 
@@ -125,6 +114,58 @@ void HandleException(Exception ex)
     Console.WriteLine(ex.Message);
 }
 
+IEnumerable<Location> FilterCsvRecords(CsvReader csvReader, int totalLinesToSkip = 0)
+{
+    var locations = new List<Location>();
+
+    while (csvReader.Read())
+    {
+        try
+        {
+            csvReader.Context.RegisterClassMap<LocationMap>();
+
+            var location = csvReader.GetRecord<Location>();
+
+            if (location is not null && IsRecordValid(location))
+                locations.Add(location);
+        }
+        catch (CsvHelper.TypeConversion.TypeConverterException ex)
+        {
+            Console.WriteLine($"Error processing record: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading CSV file: {ex.Message}");
+        }
+    }
+
+    return locations.Skip(totalLinesToSkip);
+
+    bool IsRecordValid(Location location)
+    {
+        if (!double.TryParse(location.Latitude.ToString(), out var latitude) ||
+            latitude <= -90 || latitude >= 90)
+            return false;
+
+        if (!double.TryParse(location.Longitude.ToString(), out var longitude) ||
+            longitude <= -180 || longitude >= 180)
+            return false;
+
+        if (!int.TryParse(location.ZeroValue.ToString(), out var zeroValue) ||
+            (zeroValue != 0 && zeroValue != 1))
+            return false;
+
+        if (!double.TryParse(location.Altitude.ToString(), out var altitude) ||
+            altitude <= -1000 || altitude >= 10000)
+            return false;
+
+        if (!DateTime.TryParse($"{location.Date} {location.Time}", out var date))
+            return false;
+
+        return true;
+    }
+}
+
 public class LocationMap : ClassMap<Location>
 {
     public LocationMap()
@@ -137,4 +178,6 @@ public class LocationMap : ClassMap<Location>
         Map(m => m.NumberOfDays).Name("NumberOfDays");
         Map(m => m.Date).Name("Date");
     }
+
+  
 }
