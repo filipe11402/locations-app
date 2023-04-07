@@ -7,4 +7,23 @@ services:
       dockerfile: src/Locations.API/Dockerfile
       context: .
     ports:
-      - 44383:80
+      - 5217:80
+    networks:
+      - location
+  
+  location-frontend:
+    container_name: "location-frontend"
+    build:
+      dockerfile: Dockerfile
+      context: ./src/Mobile/
+    ports:
+      - 8100:8100
+    depends_on:
+      - location-backend
+    networks:
+      - location
+
+  
+networks:
+  location:
+    driver: bridge

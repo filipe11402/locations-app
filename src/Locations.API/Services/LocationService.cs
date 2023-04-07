@@ -48,21 +48,37 @@ public class LocationService : ILocationService
 
     public async Task<bool> SaveLocationAsync(SaveLocationRequest location) 
     {
-        using var streamWriter = new StreamWriter($"{Directory.GetCurrentDirectory()}/Locations/{location.DeviceId}.csv");
-        using var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
+        try
+        {
+            var filePath = Path.Combine(
+    Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+    $"Locations/{location.DeviceId}.csv");
 
-        csvWriter.WriteRecord(
-            new Location
-            {
-                //TODO: check this scenario
-                //DeviceId = location.DeviceId,
-                Latitude = location.Latitude,
-                Longitude = location.Longitude
-            });
+            //var t = $"{Directory.GetCurrentDirectory()}/Locations/{location.DeviceId}.csv";
 
-        await csvWriter.DisposeAsync();
-        await streamWriter.DisposeAsync();
+            using var streamWriter = new StreamWriter(filePath);
+            using var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
 
-        return true;
+            csvWriter.WriteRecord(
+                new Location
+                {
+                    //TODO: check this scenario
+                    //DeviceId = location.DeviceId,
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude
+                });
+
+            await csvWriter.DisposeAsync();
+            await streamWriter.DisposeAsync();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            throw;
+        }
+
+
     }
 }

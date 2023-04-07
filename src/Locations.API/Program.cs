@@ -12,7 +12,7 @@ builder.Services.AddCors(action =>
     {
         policy.AllowAnyHeader();
         policy.AllowAnyMethod();
-        policy.WithOrigins("http://localhost:8100");
+        policy.AllowAnyOrigin();
     });
 });
 
