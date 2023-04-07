@@ -1,0 +1,7 @@
+{
+  "name": "locations_csv",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
