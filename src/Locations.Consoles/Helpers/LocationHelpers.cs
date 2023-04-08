@@ -26,13 +26,12 @@ public static class LocationHelpers
     public static double CalculateSpeedInKmPerHour(this double distanceInMetersPerSecond)
     => Math.Round(distanceInMetersPerSecond * 3.6, 2);
 
-    public static string GetTransportationMethod(this double distanceInKmPerHour)
+
+    public static string GetTransportationMethod(this double timeDifferenceInSeconds)
     {
-        if (distanceInKmPerHour == 0) { return "Parado"; }
-        if (distanceInKmPerHour <= 5) { return "Pé"; }
-        if(distanceInKmPerHour > 5 && distanceInKmPerHour <= 20) { return "Bicicleta"; }
-        if(distanceInKmPerHour > 20 && distanceInKmPerHour <= 120) { return "Carro"; }
-        if(distanceInKmPerHour > 120 && distanceInKmPerHour <= 200) { return "Comboio"; }
-        return "Avião";
+        if (timeDifferenceInSeconds <= 900) { return "Caminhada"; }
+        if(timeDifferenceInSeconds > 900 && timeDifferenceInSeconds <= 1500) { return "Carro"; }
+        if(timeDifferenceInSeconds > 1500 && timeDifferenceInSeconds <= 37500) { return "Comboio"; }
+        return "Desconhecido";
     }
 }

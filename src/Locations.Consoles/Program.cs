@@ -68,7 +68,7 @@ try
 
         Console.WriteLine($"VELOCIDADE ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationSpeedInKmsPerHour} km/h \n");
 
-        var transportationVehicle = transportationSpeedInKmsPerHour.GetTransportationMethod();
+        var transportationVehicle = timeDifferece.GetTransportationMethod();
 
         Console.WriteLine($"VEICULO UTILIZADO ENTRE PONTO {startLocationCount} VS PONTO {endLocationCount}: {transportationVehicle} \n");
 
