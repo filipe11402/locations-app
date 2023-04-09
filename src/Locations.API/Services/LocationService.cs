@@ -1,7 +1,10 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using Locations.API.Models;
 using Locations.API.Requests;
+using System.Formats.Asn1;
 using System.Globalization;
+using System.Reflection;
 
 namespace Locations.API.Services;
 
@@ -51,21 +54,28 @@ public class LocationService : ILocationService
         try
         {
             var filePath = Path.Combine(
-    Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-    $"Locations/{location.DeviceId}.csv");
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
+                $"Locations/{location.DeviceId}.csv");
 
-            //var t = $"{Directory.GetCurrentDirectory()}/Locations/{location.DeviceId}.csv";
+            var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false
+            };
 
-            using var streamWriter = new StreamWriter(filePath);
+            using var stream = File.Open(filePath, FileMode.Append);
+
+            using var streamWriter = new StreamWriter(stream);
             using var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture);
 
             csvWriter.WriteRecord(
                 new Location(location.DeviceId,
                 location.Latitude,
                 location.Longitude));
+            csvWriter.NextRecord();
 
             await csvWriter.DisposeAsync();
             await streamWriter.DisposeAsync();
+            await stream.DisposeAsync();
 
             return true;
         }
