@@ -161,7 +161,7 @@ const Tab1: React.FC = () => {
               onClick={(e) => {
                 e.preventDefault();
                 window.location.replace(
-                  `https://localhost:7072/api/Locations/file/${devideId}/download`
+                  `${environment.API_URL}/api/Locations/file/${devideId}/download`
                 );
               }}
               expand="full"
